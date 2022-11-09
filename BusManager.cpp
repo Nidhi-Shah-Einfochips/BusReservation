@@ -12,7 +12,7 @@
 #include"Bus.h"
 #include"Ticket_manager_IF.h"
 #include"Ticket_manager.h"
-BusIF::Ptr B2;
+
 BusManager::BusManager()
 {
     
@@ -28,6 +28,7 @@ void BusManager::AddBus(BusIF::BusDetails BusInfo)
     BusIF::Ptr B2;
     B2 = Bus::CreateBus(BusInfo);
     BusList[BusInfo.m_BusNo]=B2;
+    
 }
 std::list<std::string> BusManager::search(stationcode::stCode src,stationcode::stCode des)
 {
@@ -42,11 +43,8 @@ std::list<std::string> BusManager::search(stationcode::stCode src,stationcode::s
             }
         }
     }
-    // for(auto it = buslist.begin();it!=buslist.end();it++)
-    // {
-    //     std::cout<<*it<<std::endl;
-    // }
-    // return buslist;
+
+    return buslist;
 }
 
 #if 0

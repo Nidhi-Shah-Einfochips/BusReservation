@@ -14,17 +14,19 @@ public:
         std::string m_Name;
         int m_seatNo;
         std::string m_status;
-        Details(std::string PNR, int seatNo, std::string status)
+        Details(std::string PNR, int seatNo, std::string status,std::string name)
         {
             m_PNR = PNR;
             m_seatNo = seatNo;
             m_status = status;
+            m_Name = name;
         }
         Details(Details &d)
         {
             m_PNR = d.m_PNR;
             m_seatNo = d.m_seatNo;
             m_status = d.m_status;
+            m_Name = d.m_Name;
         }
     };
     virtual void updateDetalis(TicketIF::Details) = 0;

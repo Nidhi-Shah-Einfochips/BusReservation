@@ -4,13 +4,18 @@
 #include<bits/stdc++.h>
 #include"BusIF.h"
 #include"Bus.h"
+#include"Ticket_manager_IF.h"
+#include"Ticket_manager.h"
 #include"StationCode.h"
 Bus::Bus(BusIF::BusDetails Details):m_BusDetails(Details)
 {
+    Ticket_manager_IF::Ptr T2 =TicketManager::CreateManager(5);
+    
 }
-BusIF::Ptr Bus::CreateBus(BusIF::BusDetails Details)
+BusIF::Ptr Bus::CreateBus(BusIF::BusDetails &Details)
 {
-    BusIF::Ptr pbus(new Bus(Details));
+    Bus::Ptr pbus(new Bus(Details));
+    Details.m_BusNo = pbus->GenrateBusID();
     return pbus;
 }
 std::string Bus::GenrateBusID()
@@ -18,19 +23,14 @@ std::string Bus::GenrateBusID()
     static int BusNum=0;
     BusNum++;
     std::string mystr="BusID_";
-    m_BusDetails.m_BusNo = mystr + std::to_string(BusNum);
+    std::string Id = mystr + std::to_string(BusNum);
+    return Id;
 }
 bool Bus::isStationAvailable(stationcode::stCode s)
 {
    auto it = std::find(m_BusDetails.m_station.begin(),m_BusDetails.m_station.end(),s);
-   if(it!=m_BusDetails.m_station.end())
-   {
-    return true;
-   }
-   else
-   {
-    return false;
-   }
+   return (it!=m_BusDetails.m_station.end());
+   
 }
 #if 0
 std::string Bus::setDetails()

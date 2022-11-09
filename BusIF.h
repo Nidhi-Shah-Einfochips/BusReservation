@@ -29,7 +29,6 @@ public:
     };
     virtual bool isStationAvailable(stationcode::stCode)=0;
     
-
     virtual ~BusIF(){};
 
 };

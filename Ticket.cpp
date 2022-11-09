@@ -57,5 +57,6 @@ std::string Ticket::printDetails()
     ss << "PNR : " << m_details.m_PNR<<"\t";
     ss << "SeatNo. : " << m_details.m_seatNo<<"\t";
     ss << "Status : " << m_details.m_status<<"\t";
+    ss << "Name : " <<m_details.m_Name<<"\t";
     return ss.str();
 }
