@@ -9,7 +9,7 @@ class Ticket:public TicketIF,public std::enable_shared_from_this<Ticket>
 {
 public:
        typedef std::shared_ptr<Ticket> Ptr;
-        static TicketIF::Ptr CreateTicket(TicketIF::Details);
+        static TicketIF::Ptr CreateTicket(TicketIF::Details &);
         void updateDetalis(TicketIF::Details);
         bool isConfromed(); 
         bool isWaiting();

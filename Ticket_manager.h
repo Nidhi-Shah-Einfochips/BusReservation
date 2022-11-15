@@ -11,8 +11,9 @@ class TicketManager:public Ticket_manager_IF , public  std::enable_shared_from_t
 {
     private:
         TicketManager(int);
-        int LastBookCount=1;
+        int LastBookCount=0;
         int Total_seats;
+        int m_nBBookcouunt=0;
         Ticket_manager_IF::JourneyDetails m_JourneyDetails;
         std::map<std::string,TicketIF::Ptr> m_passanger;
         

@@ -9,11 +9,13 @@
 #include "Ticket_manager_IF.h"
 Ticket::Ticket(TicketIF::Details Details):m_details(Details)
 {
+   
 }
 
-TicketIF::Ptr Ticket::CreateTicket(TicketIF::Details details)
+TicketIF::Ptr Ticket::CreateTicket(TicketIF::Details &details)
 {
-    TicketIF::Ptr pTickit(new Ticket(details));
+    Ticket::Ptr pTickit(new Ticket(details));
+    details.m_PNR=pTickit->GenratePNR();
     return pTickit;
 }
 

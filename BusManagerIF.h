@@ -16,7 +16,7 @@ public:
     virtual ~BusManagerIF(){};
     
     virtual void AddBus(BusIF::BusDetails)=0;
-    virtual std::list<std::string> search(stationcode::stCode,stationcode::stCode)=0;
+    virtual std::list<BusIF::Ptr> search(stationcode::stCode,stationcode::stCode)=0;
     // virtual void DeleteBus()=0;
     // virtual void PreparedChart()=0;
     // virtual void ShowBusList()=0;

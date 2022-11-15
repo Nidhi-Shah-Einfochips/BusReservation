@@ -2,7 +2,8 @@
 #define _BusIF_H_
 #include<memory>
 #include<iostream>
-#include"StationCode.h"
+#include "StationCode.h"
+#include "Ticket_manager_IF.h"
 class BusIF
 {
 public:
@@ -28,7 +29,9 @@ public:
 
     };
     virtual bool isStationAvailable(stationcode::stCode)=0;
-    
+    virtual std::string BookTicket(Ticket_manager_IF::JourneyDetails)=0;
+    virtual std::string PrintBusDetails()=0;
+    virtual void updateDetalis(BusIF::BusDetails)=0;
     virtual ~BusIF(){};
 
 };

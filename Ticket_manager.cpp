@@ -25,28 +25,33 @@ Ticket_manager_IF::Ptr TicketManager::CreateManager(int TotalSeats)
 }
 std::string TicketManager::BookTicket(Ticket_manager_IF::JourneyDetails JourneyDetails)
 {
-    TicketIF::Ptr T1;
-    std::string Success;
-    static int seat=1;
     std::string status;
-    if(seat<=Total_seats)
-    {
-        status = "CNF";
-    }
-    else
-    {
-        status = "waiting";
-    }
     for(auto it = JourneyDetails.pass_name.begin();it!=JourneyDetails.pass_name.end();it++)
     {
-        TicketIF::Details Details("ticket",seat,status,*it);
-        T1 = Ticket::CreateTicket(Details);
-        seat++;
-        Success = T1->printDetails(); 
-        return Success;
+       
+        LastBookCount++;
+        if(LastBookCount<=Total_seats)
+        {
+            m_nBBookcouunt++;
+            status = "CNF";
+        }
+        else
+        {
+            if(LastBookCount==(Total_seats + 1))
+            {
+                m_nBBookcouunt=0;
+            }
+            m_nBBookcouunt++;
+            status = "waiting";
+        }
+        TicketIF::Details Details("Ticket",m_nBBookcouunt,status,*it);
+        TicketIF::Ptr T1 = Ticket::CreateTicket(Details);
+        T1->updateDetalis(Details);
+        m_passanger[Details.m_PNR]=T1;
+        std::cout<<T1->printDetails()<<std::endl;
     }
-    
-   
+
+   return "booking done";
 
 }
 

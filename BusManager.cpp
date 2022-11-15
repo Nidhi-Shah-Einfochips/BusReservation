@@ -28,20 +28,22 @@ void BusManager::AddBus(BusIF::BusDetails BusInfo)
     BusIF::Ptr B2;
     B2 = Bus::CreateBus(BusInfo);
     BusList[BusInfo.m_BusNo]=B2;
+    B2->updateDetalis(BusInfo);
     
 }
-std::list<std::string> BusManager::search(stationcode::stCode src,stationcode::stCode des)
+std::list<BusIF::Ptr> BusManager::search(stationcode::stCode src,stationcode::stCode des)
 {
-    std::list<std::string> buslist;
+    std::list<BusIF::Ptr> buslist;
     for(auto it = BusList.begin();it!=BusList.end();it++)
     {
         if(it->second->isStationAvailable(src)==true)
         {
             if(it->second->isStationAvailable(des)==true)
             {
-                buslist.push_back(it->first);
+                buslist.push_back(it->second);
             }
         }
+        
     }
 
     return buslist;

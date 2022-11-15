@@ -5,7 +5,6 @@
 #include<map>
 #include<list>
 #include"Ticket_IF.h"
-#include"BusIF.h"
 #include"StationCode.h"
 
 class Ticket_manager_IF

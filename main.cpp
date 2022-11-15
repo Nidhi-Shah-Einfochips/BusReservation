@@ -14,7 +14,7 @@
 #include<iterator>
 #include<vector>
 #include"StationCode.h"
-std::ostream &operator<<(std::ostream &os, const std::list<std::string> &list)
+std::ostream &operator<<(std::ostream &os, const std::list<BusIF::Ptr> &list)
 {
     for (auto const &i: list) {
         os << i << std::endl;
@@ -25,8 +25,9 @@ int main()
 {
     int m_s;
     int m_d;
-    int i=0;
+    int i;
     int pass_no;
+    int bus;
     std::string m_name;
     std::list<stationcode::stCode> stationlist1;
     std::list<stationcode::stCode> stationlist2;
@@ -42,13 +43,14 @@ int main()
     //TicketIF::Details Details1("ABC",1,"CNF");
     //T1->updateDetalis(Details1);
    // std::cout<<T1->printDetails()<<std::endl;
-    // Ticket_manager_IF::Ptr T2 =TicketManager::CreateManager(5);
+    //Ticket_manager_IF::Ptr T2 =TicketManager::CreateManager(5);
     Ticket_manager_IF::JourneyDetails Journey;
     BusManagerIF::Ptr B1= BusManager::CreateBusManager();
     BusIF::BusDetails details("Bus1",stationlist1,5);
-    BusIF::BusDetails details1("Bus2",stationlist2,4);
+    BusIF::BusDetails details1("Bus2",stationlist1,4);
     B1->AddBus(details);
     B1->AddBus(details1);
+    i=0;
     for (auto it = stationcode::Station.begin() ; it != stationcode::Station.end(); ++it)
     {
         std::cout <<i<< "\t" << *it<<std::endl;
@@ -61,8 +63,18 @@ int main()
     std::cin>>m_d;
     Journey.destination = (stationcode::stCode)m_d;
     std::cout<<"List of bus that go from "<<stationcode::Station[m_s]<<" to "<<stationcode::Station[m_d]<<std::endl;
-    std::list <std::string> buslist;
-    std::cout<<B1->search((stationcode::stCode)m_s,(stationcode::stCode)m_d);
+    std::list <BusIF::Ptr> buslist;
+    buslist=B1->search((stationcode::stCode)m_s,(stationcode::stCode)m_d);
+    i=0;
+    for(auto it=buslist.begin();it!=buslist.end();it++)
+    {
+        std::cout<<i<<"\t"<<(*it)->PrintBusDetails()<<std::endl;
+        i++;
+    }
+    std::cout<<"Select the bus"<<std::endl;
+    std::cin>>bus;
+    std::list<BusIF::Ptr>::iterator it = buslist.begin();
+    std::advance(it,bus);
     std::cout<<"How many passengers do you want to enter"<<std::endl;
     std::cin>>pass_no;
     for(int k=0;k<pass_no;k++)
@@ -71,8 +83,9 @@ int main()
         std::cin>>m_name;
         Journey.pass_name.push_back(m_name);
     }
-    //std::cout<<T2->BookTicket(Journey);
+    std::cout<<(*it)->BookTicket(Journey)<<std::endl;
     std::cout<<std::endl;
+
    
     
     

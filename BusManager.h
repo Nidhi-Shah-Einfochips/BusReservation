@@ -17,7 +17,7 @@ class BusManager:public BusManagerIF , public  std::enable_shared_from_this<BusM
         typedef std::shared_ptr<BusManager> Ptr;
         static BusManagerIF::Ptr CreateBusManager();
         void AddBus(BusIF::BusDetails);
-        std::list<std::string> search(stationcode::stCode,stationcode::stCode);
+        std::list<BusIF::Ptr> search(stationcode::stCode,stationcode::stCode);
         // void DeleteBus();
         // void PreparedChart();
         // void ShowBusList();
