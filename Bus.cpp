@@ -100,7 +100,7 @@ std::string Bus::PrintBusDetails()
     int y =*k;
     ss << "Station : "<<stationcode::Station[x]<<" to "<<stationcode::Station[y]<<" \t";
     ss << "Capacity : " << m_BusDetails.m_capacity<<"\t";
-    ss << "Avaiable Seats : "<<m_BusDetails.m_avaiableSeats<<"\t";
+    //ss << "Avaiable Seats : "<<m_BusDetails.m_avaiableSeats<<"\t";
     return ss.str();
 }
 

@@ -29,20 +29,19 @@ int main()
     int pass_no;
     int bus;
     std::string m_name;
-    std::list<stationcode::stCode> stationlist1;
+    
     std::list<stationcode::stCode> stationlist2;
     BusManagerIF::Ptr B1= BusManager::CreateBusManager();
     std::list <BusIF::Ptr> buslist;
     std::list<BusIF::Ptr>::iterator it;
     
-    stationlist1.push_back(stationcode::AHM);
-    stationlist1.push_back(stationcode::BHA);
-    stationlist1.push_back(stationcode::BOD);
+    // stationlist1.push_back(stationcode::AHM);
+    // stationlist1.push_back(stationcode::BHA);
+    // stationlist1.push_back(stationcode::BOD);
     stationlist2.push_back(stationcode::SUT);
     stationlist2.push_back(stationcode::PUN);
     std::cout<<std::endl;
-    BusIF::BusDetails details("Bus1",stationlist1,5,5);
-    BusIF::BusDetails details1("Bus2",stationlist1,4,5);
+    //BusIF::BusDetails details1("Bus2",stationlist1,4,5);
     int expression;
     int ch;
     int choice;
@@ -71,9 +70,33 @@ int main()
                 switch (ch)
                 {
                     case 1:
+                    {
                         std::cout<<"------Add bus------"<<std::endl;
+                        std::list<stationcode::stCode> stationlist1;
+                        int stat;
+                        int code;
+                        int capacity;
+                        std::cout<<"Add the stations you want add in busroute"<<std::endl;
+                        i=0;
+                        for (auto it = stationcode::Station.begin() ; it != stationcode::Station.end(); ++it)
+                        {
+                            std::cout <<i<< "\t" << *it<<std::endl;
+                            i++;
+                        }
+                        std::cout<<"Enter the no of stations you need to add"<<std::endl;
+                        std::cin>>stat;
+                        for(int i=0;i<stat;i++)
+                        {
+                            std::cout<<"Add the station code"<<std::endl;
+                            std::cin>>code;
+                            stationlist1.push_back((stationcode::stCode)code);
+                        }
+                        std::cout<<"Enter the capacity of bus"<<std::endl;
+                        std::cin>>capacity;
+                        BusIF::BusDetails details("Bus1",stationlist1,capacity,capacity);
                         B1->AddBus(details);
-                        B1->AddBus(details1);
+                        //B1->AddBus(details1);
+                    }
                         break;
                     case 2:
                         std::cout<<"---------Delete Bus-----"<<std::endl;
@@ -135,13 +158,21 @@ int main()
                         std::cout<<"Enter the destination"<<std::endl;
                         std::cin>>m_d;
                         Journey.destination = (stationcode::stCode)m_d;
-                        std::cout<<"List of bus that go from "<<stationcode::Station[m_s]<<" to "<<stationcode::Station[m_d]<<std::endl;
                         buslist=B1->search((stationcode::stCode)m_s,(stationcode::stCode)m_d);
                         i=0;
-                        for(auto it=buslist.begin();it!=buslist.end();it++)
+                        if(!buslist.empty())
                         {
-                            std::cout<<i<<"\t"<<(*it)->PrintBusDetails()<<std::endl;
-                            i++;
+                            std::cout<<"List of bus that go from "<<stationcode::Station[m_s]<<" to "<<stationcode::Station[m_d]<<std::endl;
+                            for(auto it=buslist.begin();it!=buslist.end();it++)
+                            {
+                                std::cout<<i<<"\t"<<(*it)->PrintBusDetails()<<std::endl;
+                                i++;
+                            }
+                        }
+                        else
+                        {
+                            std::cout<<"No bus avaiable for such route"<<std::endl;
+                            break;
                         }
                         std::cout<<"Select the bus"<<std::endl;
                         std::cin>>bus;
