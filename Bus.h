@@ -15,6 +15,7 @@ class Bus:public BusIF,public std::enable_shared_from_this<Bus>
         BusIF::BusDetails m_BusDetails;
         std::string GenrateBusID();
         Ticket_manager_IF::Ptr m_TicketManager;
+       
     public:
         typedef std::shared_ptr<Bus> Ptr;
         static BusIF::Ptr CreateBus(BusIF::BusDetails &);
@@ -22,6 +23,10 @@ class Bus:public BusIF,public std::enable_shared_from_this<Bus>
         std::string BookTicket(Ticket_manager_IF::JourneyDetails);
         void updateDetalis(BusIF::BusDetails);
         std::string PrintBusDetails();
+        std::list<TicketIF::Ptr> getFilterList(TicketIF::statusCode, char, int);
+        std::string PreparedChart();
+        bool CancelTicket(std::string);
+        void updateSeats(int);
         virtual ~Bus(){};
 
 

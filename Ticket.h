@@ -13,9 +13,11 @@ public:
         void updateDetalis(TicketIF::Details);
         bool isConfromed(); 
         bool isWaiting();
+        bool isCancel();
         int getSeatNo();
         std::string getPNR();
         std::string printDetails();
+        virtual void CancelTicket();
         virtual ~Ticket(){};
 
 private:

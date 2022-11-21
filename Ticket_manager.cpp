@@ -3,6 +3,7 @@
 #include<functional>
 #include<map>
 #include<list>
+#include<set>
 #include<bits/stdc++.h>
 #include"StationCode.h"
 #include"Ticket_manager_IF.h"
@@ -12,9 +13,19 @@
 #include"BusIF.h"
 #include"BusManager.h"
 #include"BusManagerIF.h"
+#include"Bus.h"
 TicketManager::TicketManager(int TotalSeats)
 {
     Total_seats=TotalSeats;
+    for(int i=1;i<=Total_seats;i++)
+    {
+        seatControl.push_back(i);
+    }
+    // auto update = std::bind(&Bus::updateSeats,this,std::placeholders::_1);
+    // update(seatControl.size());
+    
+    
+   
 }
 Ticket_manager_IF::Ptr TicketManager::CreateManager(int TotalSeats)
 {
@@ -23,36 +34,143 @@ Ticket_manager_IF::Ptr TicketManager::CreateManager(int TotalSeats)
    
     
 }
+bool TicketManager::compare(TicketIF::Ptr P1,TicketIF::Ptr P2)
+{
+    if(P1->getSeatNo()<P2->getSeatNo())
+    {
+        return true;
+    }
+}
 std::string TicketManager::BookTicket(Ticket_manager_IF::JourneyDetails JourneyDetails)
 {
-    std::string status;
+    int status;
+    std::string Print = "\n";
     for(auto it = JourneyDetails.pass_name.begin();it!=JourneyDetails.pass_name.end();it++)
     {
-       
         LastBookCount++;
-        if(LastBookCount<=Total_seats)
-        {
-            m_nBBookcouunt++;
-            status = "CNF";
+        TicketIF::Details Details("Ticket",0,TicketIF::statusCode::WL,*it);
+        if(!seatControl.empty())
+        {   
+            Details.m_seatNo= seatControl.front();
+            seatControl.pop_front();
+            Details.m_status= TicketIF::CNF;
+
+            
         }
         else
         {
-            if(LastBookCount==(Total_seats + 1))
-            {
-                m_nBBookcouunt=0;
-            }
-            m_nBBookcouunt++;
-            status = "waiting";
+            Details.m_seatNo=LastBookCount-Total_seats;
         }
-        TicketIF::Details Details("Ticket",m_nBBookcouunt,status,*it);
+        
         TicketIF::Ptr T1 = Ticket::CreateTicket(Details);
-        T1->updateDetalis(Details);
         m_passanger[Details.m_PNR]=T1;
-        std::cout<<T1->printDetails()<<std::endl;
+        Print= Print +"\n" + T1->printDetails();
+       
     }
+    
+    // auto update = std::bind(&BusIF::updateSeats,this,std::placeholders::_1);
+    // update(size);
+    return Print;
 
-   return "booking done";
+}
+std::list<TicketIF::Ptr> TicketManager::getFilterList(TicketIF::statusCode s, char Dir, int count)
+{
+    std::list<TicketIF::Ptr> filterList;
+    for(auto it = m_passanger.begin();it!=m_passanger.end();it++)
+    {
+        if(s==TicketIF::CNF)
+        {
+            if(it->second->isConfromed()==true)
+            {
+                filterList.push_back(it->second);
+            }
+        }
+        else if(s==TicketIF::WL)
+        {
+            if(it->second->isWaiting()==true)
+            {
+                std::cout<<it->first<<std::endl;
+                filterList.push_back(it->second);
+                
+            }
+            
+        }
+        else
+        {
+            if(it->second->isCancel()==true)
+            {
+                filterList.push_back(it->second);
+            }
+        }
+    }
+    if(!filterList.empty())
+    {
+        auto comp = std::bind(&TicketManager::compare,this,std::placeholders::_1,std::placeholders::_2);
+        filterList.sort(comp);
 
+            
+        if(Dir == 'D')
+        {
+            filterList.reverse();
+            
+        }
+        
+        if(count!=-1&&count<filterList.size())
+        {
+            filterList.resize(count);
+        }
+    }
+    return filterList;
+}
+
+std::string TicketManager::CancelTicket(std::string PNR)
+{
+    std::list<TicketIF::Ptr> waitingList;
+    auto it = m_passanger.find(PNR);
+    if(it!=m_passanger.end())
+    {
+        if(it->second->isWaiting()==true)
+        {
+            it->second->CancelTicket();
+            LastBookCount--;
+            return "Done";
+        }
+        else if(it->second->isCancel()!=true)
+        {
+
+            seatControl.push_back(it->second->getSeatNo());
+            it->second->CancelTicket();
+            LastBookCount--;
+            waitingList=getFilterList(TicketIF::WL,'A');
+            if(!waitingList.empty())
+            {
+
+                TicketIF::Ptr T1=waitingList.front();
+                waitingList.pop_front();
+                TicketIF::Details Details(T1->getPNR(),seatControl.front(),TicketIF::CNF,"book");
+                T1->updateDetalis(Details);
+                seatControl.pop_front();
+                if(!waitingList.empty())
+                {
+                    for(auto it=waitingList.begin();it!=waitingList.end();it++)
+                    {
+        
+                        TicketIF::Details newDetails((*it)->getPNR(),(*it)->getSeatNo()-1,(TicketIF::statusCode)1,"wait");
+                        (*it)->updateDetalis(newDetails);
+                    }
+                }
+            }
+    
+        }
+        
+    }
+   return "Cancelation Done";
+    
+}
+bool TicketManager::SearchPNR(std::string PNR)
+{
+    auto it = m_passanger.find(PNR);
+    return (it!=m_passanger.end());
 }
 
 #if 0

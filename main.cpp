@@ -31,82 +31,21 @@ int main()
     std::string m_name;
     std::list<stationcode::stCode> stationlist1;
     std::list<stationcode::stCode> stationlist2;
+    BusManagerIF::Ptr B1= BusManager::CreateBusManager();
+    std::list <BusIF::Ptr> buslist;
+    std::list<BusIF::Ptr>::iterator it;
+    
     stationlist1.push_back(stationcode::AHM);
     stationlist1.push_back(stationcode::BHA);
     stationlist1.push_back(stationcode::BOD);
     stationlist2.push_back(stationcode::SUT);
     stationlist2.push_back(stationcode::PUN);
-    //TicketIF::Details Details("Nidhi",1,"CNF");
-    //TicketIF::Ptr T1 = Ticket::CreateTicket(Details);
-    //std::cout<<T1->getPNR()<<std::endl;
-   // std::cout<<T1->printDetails()<<std::endl;
-    //TicketIF::Details Details1("ABC",1,"CNF");
-    //T1->updateDetalis(Details1);
-   // std::cout<<T1->printDetails()<<std::endl;
-    //Ticket_manager_IF::Ptr T2 =TicketManager::CreateManager(5);
-    Ticket_manager_IF::JourneyDetails Journey;
-    BusManagerIF::Ptr B1= BusManager::CreateBusManager();
-    BusIF::BusDetails details("Bus1",stationlist1,5);
-    BusIF::BusDetails details1("Bus2",stationlist1,4);
-    B1->AddBus(details);
-    B1->AddBus(details1);
-    i=0;
-    for (auto it = stationcode::Station.begin() ; it != stationcode::Station.end(); ++it)
-    {
-        std::cout <<i<< "\t" << *it<<std::endl;
-        i++;
-    }
-    std::cout<<"Enter the source"<<std::endl;
-    std::cin>>m_s;
-    Journey.source = (stationcode::stCode)m_s;
-    std::cout<<"Enter the destination"<<std::endl;
-    std::cin>>m_d;
-    Journey.destination = (stationcode::stCode)m_d;
-    std::cout<<"List of bus that go from "<<stationcode::Station[m_s]<<" to "<<stationcode::Station[m_d]<<std::endl;
-    std::list <BusIF::Ptr> buslist;
-    buslist=B1->search((stationcode::stCode)m_s,(stationcode::stCode)m_d);
-    i=0;
-    for(auto it=buslist.begin();it!=buslist.end();it++)
-    {
-        std::cout<<i<<"\t"<<(*it)->PrintBusDetails()<<std::endl;
-        i++;
-    }
-    std::cout<<"Select the bus"<<std::endl;
-    std::cin>>bus;
-    std::list<BusIF::Ptr>::iterator it = buslist.begin();
-    std::advance(it,bus);
-    std::cout<<"How many passengers do you want to enter"<<std::endl;
-    std::cin>>pass_no;
-    for(int k=0;k<pass_no;k++)
-    {
-        std::cout<<"Enter the name "<<std::endl;
-        std::cin>>m_name;
-        Journey.pass_name.push_back(m_name);
-    }
-    std::cout<<(*it)->BookTicket(Journey)<<std::endl;
     std::cout<<std::endl;
-
-   
-    
-    
-   
-    std::cout<<std::endl;
-    return 0;
-}
-#if 0
-
-int main()
-{
+    BusIF::BusDetails details("Bus1",stationlist1,5,5);
+    BusIF::BusDetails details1("Bus2",stationlist1,4,5);
     int expression;
     int ch;
     int choice;
-    std::string busid;
-    std::string m_source;
-    std::string m_destination;
-    BusIF::Ptr busptr;
-    //Ticket_manager_IF::Ptr tick= TicketManager::CreateManager();
-    BusManagerIF::Ptr BusM= BusManager::CreateBusManager();
-
     
    do
    {
@@ -133,15 +72,28 @@ int main()
                 {
                     case 1:
                         std::cout<<"------Add bus------"<<std::endl;
-                        BusM->AddBus();
+                        B1->AddBus(details);
+                        B1->AddBus(details1);
                         break;
                     case 2:
                         std::cout<<"---------Delete Bus-----"<<std::endl;
-                        BusM->DeleteBus();
+                        
                         break;
                     case 3:
                         std::cout<<"---------preparaed chart------"<<std::endl;
-                        BusM->PreparedChart();
+                        i=0;
+                        buslist=B1->PrintBusList();
+                        for(auto it=buslist.begin();it!=buslist.end();it++)
+                        {
+                            std::cout<<i<<"\t"<<(*it)->PrintBusDetails()<<std::endl;
+                            i++;
+                        }
+                        
+                        std::cout<<"Select the bus"<<std::endl;
+                        std::cin>>bus;
+                        it = buslist.begin();
+                        std::advance(it,bus);
+                        std::cout<<(*it)->PreparedChart()<<std::endl;
                         break;
                     case 4:
                         std::cout<<"--------back to main menu------"<<std::endl;
@@ -162,40 +114,69 @@ int main()
                     
                     std::cout<<"---------1. BOOK TICKET---------"<<std::endl;
                     std::cout<<"---------2. CANCEL TICKET---------"<<std::endl;
-                    std::cout<<"---------3. PREPARED CHART---------"<<std::endl;
-                    std::cout<<"---------4. QUIT--------------"<<std::endl;
+                    std::cout<<"---------3. QUIT--------------"<<std::endl;
                     std::cout<<"---------ENTER YOUR CHOICE---------"<<std::endl;
                     std::cin>>choice;
                     switch (choice)
                     {
                     case 1:
+                    {
+                        Ticket_manager_IF::JourneyDetails Journey;
                         std::cout<<"---------BOOK TICKET---------"<<std::endl;
-                        //BusM->ShowBusList();
-                        std::cout<<"Enter the the source and destination you want to go "<<std::endl;
-                        std::cin>>m_source>>m_destination;
-                        busptr=BusM->Search(m_source,m_destination);
-                        
-                        BusM->BookTicket(busptr);
+                        i=0;
+                        for (auto it = stationcode::Station.begin() ; it != stationcode::Station.end(); ++it)
+                        {
+                            std::cout <<i<< "\t" << *it<<std::endl;
+                            i++;
+                        }
+                        std::cout<<"Enter the source"<<std::endl;
+                        std::cin>>m_s;
+                        Journey.source = (stationcode::stCode)m_s;
+                        std::cout<<"Enter the destination"<<std::endl;
+                        std::cin>>m_d;
+                        Journey.destination = (stationcode::stCode)m_d;
+                        std::cout<<"List of bus that go from "<<stationcode::Station[m_s]<<" to "<<stationcode::Station[m_d]<<std::endl;
+                        buslist=B1->search((stationcode::stCode)m_s,(stationcode::stCode)m_d);
+                        i=0;
+                        for(auto it=buslist.begin();it!=buslist.end();it++)
+                        {
+                            std::cout<<i<<"\t"<<(*it)->PrintBusDetails()<<std::endl;
+                            i++;
+                        }
+                        std::cout<<"Select the bus"<<std::endl;
+                        std::cin>>bus;
+                        it = buslist.begin();
+                        std::advance(it,bus);
+                        std::cout<<"How many passengers do you want to enter"<<std::endl;
+                        std::cin>>pass_no;
+                        for(int k=0;k<pass_no;k++)
+                        {
+                            std::cout<<"Enter the name "<<std::endl;
+                            std::cin>>m_name;
+                            Journey.pass_name.push_back(m_name);
+                        }
+                        std::cout<<(*it)->BookTicket(Journey)<<std::endl;
 
-                        //tick->BookTicket();
-                        
+                    }                      
                         break;
                     case 2:
+                    {
+                        std::string PNR;
                         std::cout<<"---------CANCEL TICKET---------"<<std::endl;
-                        //tick->CancelTicket();
+                        std::cout<<"Enter the PNR no"<<std::endl;
+                        std::cin>>PNR;
+                        std::cout<<B1->CancelTicket(PNR)<<std::endl;
+                        std::cout<<std::endl;
+                    }
                         break;
                     case 3:
-                        std::cout<<"---------PREPARED CHART---------"<<std::endl;
-                        //tick->PreparedChart();
-                        break;
-                    case 4:
                         std::cout<<"---------------QUIT--------------"<<std::endl;
                         break;
                     default:
                         std::cout<<"ENTER VALID CHOICE"<<std::endl;
                         break;
                     }
-                    } while (choice!=4);
+                    } while (choice!=3);
                     break;
         case 3:
             std::cout<<"Quit "<<std::endl;
@@ -210,4 +191,3 @@ int main()
    return 0;
     
 }
-#endif

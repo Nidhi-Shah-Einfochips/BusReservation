@@ -18,11 +18,8 @@ class BusManager:public BusManagerIF , public  std::enable_shared_from_this<BusM
         static BusManagerIF::Ptr CreateBusManager();
         void AddBus(BusIF::BusDetails);
         std::list<BusIF::Ptr> search(stationcode::stCode,stationcode::stCode);
-        // void DeleteBus();
-        // void PreparedChart();
-        // void ShowBusList();
-        //BusIF::Ptr Search();
-        //void BookTicket(BusIF::Ptr);
+        std::list<BusIF::Ptr> PrintBusList();
+        bool CancelTicket(std::string);
         virtual ~BusManager(){};
         
 

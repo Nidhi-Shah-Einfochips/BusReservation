@@ -20,8 +20,10 @@ public:
     Ticket_manager_IF(){};
     virtual ~Ticket_manager_IF(){};
     virtual std::string BookTicket(Ticket_manager_IF::JourneyDetails)=0;
-    //virtual void CancelTicket()=0;
-    //virtual void PreparedChart()=0;
+    virtual std::string CancelTicket(std::string)=0;
+    virtual std::list<TicketIF::Ptr> getFilterList(TicketIF::statusCode s,char Dir,int count=-1)=0;
+    virtual bool SearchPNR(std::string)=0;
+    
     
 };
 #endif

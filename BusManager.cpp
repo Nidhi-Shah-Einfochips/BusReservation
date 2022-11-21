@@ -28,7 +28,7 @@ void BusManager::AddBus(BusIF::BusDetails BusInfo)
     BusIF::Ptr B2;
     B2 = Bus::CreateBus(BusInfo);
     BusList[BusInfo.m_BusNo]=B2;
-    B2->updateDetalis(BusInfo);
+    std::cout<<B2->PrintBusDetails()<<std::endl;
     
 }
 std::list<BusIF::Ptr> BusManager::search(stationcode::stCode src,stationcode::stCode des)
@@ -45,8 +45,32 @@ std::list<BusIF::Ptr> BusManager::search(stationcode::stCode src,stationcode::st
         }
         
     }
+    
 
     return buslist;
+}
+std::list<BusIF::Ptr> BusManager::PrintBusList()
+{
+    std::list<BusIF::Ptr> Buslist;
+    for(auto it=BusList.begin();it!=BusList.end();it++)
+    {
+        Buslist.push_back(it->second);
+    }
+    return Buslist;
+}
+bool BusManager::CancelTicket(std::string PNR)
+{
+    for(auto it=BusList.begin();it!=BusList.end();it++)
+    {
+        std::cout<<PNR<<std::endl;
+        if(it->second->CancelTicket(PNR)==true)
+        {
+            std::cout<<"true"<<std::endl;
+            return true;
+        }
+       
+    }
+    
 }
 
 #if 0

@@ -14,17 +14,20 @@ public:
         std::string m_BusNo;
         std::list<stationcode::stCode> m_station;
         int m_capacity;
-        BusDetails(std::string BusNo, std::list<stationcode::stCode> station, int capacity)
+        int m_avaiableSeats;
+        BusDetails(std::string BusNo, std::list<stationcode::stCode> station, int capacity,int AvaibleSeats)
         {
             m_BusNo=BusNo;
             m_station=station;
             m_capacity=capacity;
+            m_avaiableSeats=AvaibleSeats;
         }
         BusDetails(BusDetails &bus)
         {
             m_BusNo=bus.m_BusNo;
             m_station=bus.m_station;
             m_capacity=bus.m_capacity;
+            m_avaiableSeats=bus.m_avaiableSeats;
         }
 
     };
@@ -32,6 +35,10 @@ public:
     virtual std::string BookTicket(Ticket_manager_IF::JourneyDetails)=0;
     virtual std::string PrintBusDetails()=0;
     virtual void updateDetalis(BusIF::BusDetails)=0;
+    virtual std::list<TicketIF::Ptr> getFilterList(TicketIF::statusCode, char, int)=0;
+    virtual std::string PreparedChart()=0;
+    virtual bool CancelTicket(std::string)=0;
+    virtual void updateSeats(int)=0;
     virtual ~BusIF(){};
 
 };
